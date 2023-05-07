@@ -12,8 +12,6 @@ This repo explains how the Hive can preserves the processing result in storage.
 
 See also URL below:
 > https://github.com/developer-onizuka/AzureDataFactory#4-difference-between-hive-presto-and-spark
-
-
 > https://medium.com/@sarfarazhussain211/metastore-in-apache-spark-9286097180a4
 
 # 0. Create Virtual Machine and Run mongoDB
