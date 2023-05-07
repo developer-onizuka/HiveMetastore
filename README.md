@@ -1,6 +1,10 @@
 # Metastore in Apache Spark
 > https://medium.com/@sarfarazhussain211/metastore-in-apache-spark-9286097180a4
 
+# 0. Create Virtual Machine and Run mongoDB
+See URL below:
+> https://github.com/developer-onizuka/mongo-Spark
+ 
 # 1. Create Spark Session with Hive
 ```
 from pyspark.sql import SparkSession
@@ -34,7 +38,7 @@ print("# spark.sql.catalogImplementation = ", conf.get("spark.sql.catalogImpleme
 # spark.sql.catalogImplementation =  hive
 ```
 
-# 3. Extract data from MongoDB to DataFrame in Spark
+# 3. Extract data from mongoDB to DataFrame in Spark
 ```
 df = spark.read.format("mongo") \
                .option("database","test") \
