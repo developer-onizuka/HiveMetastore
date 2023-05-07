@@ -122,7 +122,7 @@ spark.sql("SELECT * FROM products_new WHERE StandardCost > 2000").show()
 ```
 
 # 7. Lifecycle of Metastore
-If mongoDB is updated, then you should load it into DataFrame with **spark.read.format("mongo")** again and **df.write.mode("overwrite").saveAsTable("products_new")** so that the Hive Metastore can be updated if needed (ex. a new parquet file is created).
+If mongoDB is updated, then you should load it into DataFrame with **spark.read.format("mongo")** again and **df.write.mode("overwrite").saveAsTable("products_new")** so that the Hive Metastore can be updated if needed.
 
 # 7-1. Add a new record into mongoDB
 ```
