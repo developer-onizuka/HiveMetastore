@@ -124,34 +124,11 @@ spark.sql("SELECT * FROM products_new WHERE StandardCost > 2000").show()
 # 7. Lifecycle of Metastore
 If mongoDB is updated, then you should load it into DataFrame with **spark.read.format("mongo")** again and **df.write.mode("overwrite").saveAsTable("products_new")** so that the Hive Metastore can be updated if needed (ex. a new parquet file is created).
 
-# 7-1. Add new record into mongoDB
+# 7-1. Add a new record into mongoDB
 ```
 root@efe0e844a026:/# cat <<EOF >products2.csv
 ProductID,ProductNumber,ProductName,ModelName,MakeFlag,StandardCost,ListPrice,SubCategoryID
 1000,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3000.00,3000.00,2
-1001,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3001.00,3000.00,2
-1002,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3002.00,3000.00,2
-1003,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3003.00,3000.00,2
-1004,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3004.00,3000.00,2
-1005,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3005.00,3000.00,2
-1006,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3006.00,3000.00,2
-1007,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3007.00,3000.00,2
-1008,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3008.00,3000.00,2
-1009,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3009.00,3000.00,2
-1010,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3010.00,3000.00,2
-1011,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3011.00,3000.00,2
-1012,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3012.00,3000.00,2
-1013,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3013.00,3000.00,2
-1014,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3014.00,3000.00,2
-1015,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3015.00,3000.00,2
-1016,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3016.00,3000.00,2
-1017,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3017.00,3000.00,2
-1018,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3018.00,3000.00,2
-1019,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3019.00,3000.00,2
-1020,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3020.00,3000.00,2
-1021,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3021.00,3000.00,2
-1022,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3022.00,3000.00,2
-1023,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3023.00,3000.00,2
 EOF
 ```
 ```
