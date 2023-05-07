@@ -63,7 +63,7 @@ df = spark.read.format("mongo") \
 ```
 
 # 4. Save the DataFrame as a persistent table
-DataFrames can also be saved as persistent tables into Hive metastore using the saveAsTable command which will materialize the contents of the DataFrame and create a pointer to the data in the Hive metastore. If the spark session is restarted, then DataFrames have gone. But the Hive metastore allows to query to the persistent table even after spark session is restared.
+DataFrames can be saved as persistent tables using the saveAsTable command which will materialize the contents of the DataFrame and create a pointer to the data in the Hive metastore. If the spark session is restarted, then DataFrames have gone. But the Hive metastore allows to query to the persistent table, even after spark session is restared as long as the persistent tables still exist. 
 ```
 df.write.mode("overwrite").saveAsTable("products_new")
 ```
