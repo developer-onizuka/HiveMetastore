@@ -1,7 +1,7 @@
 # Metastore in Apache Spark
 
 Hive provides with a SQL-compatible language on Hadoop using. But it is very difficult to understand even difference between Hive and Presto / Spark. 
-I learn how the Hive can preserve the processing result in storage via enableHiveSupport option at initiation of Spark Session, because I don't have pure Hive environments.
+I learn how the Hive can preserve the processing result in storage via enableHiveSupport option at initiation of Spark Session, because I don't have any pure Hive environments.
 
 | |	Apache Hive |	Presto / Spark |
 | :--- | :--- | :--- |
