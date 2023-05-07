@@ -1,4 +1,17 @@
 # Metastore in Apache Spark
+
+Hive provides with a SQL-compatible language on Hadoop using. But it is very difficult to understand even difference between Hive and Presto or Spark.
+
+
+| |	Apache Hive |	Presto |
+| :--- | :--- | :--- |
+| Intermediate result |	Write to Storage |	Write to Memory |
+| Performance |	Slow |	Fast |
+| Data size |	Large | Small |
+|C heckpoint of Failure |	Resume from intermediate data saved in storage | Start over |
+
+
+
 > https://medium.com/@sarfarazhussain211/metastore-in-apache-spark-9286097180a4
 
 # 0. Create Virtual Machine and Run mongoDB
