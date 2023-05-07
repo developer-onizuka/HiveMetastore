@@ -1,7 +1,7 @@
 # Metastore in Apache Spark
 
 Hive provides with a SQL-compatible language on Hadoop using. But it is very difficult to understand even difference between Hive and Presto / Spark. 
-This repo explains how the Hive can preserves the processing result in storage.
+I learn how the Hive can preserve the processing result in storage via enableHiveSupport option at initiation of Spark Session, because I don't have pure Hive environments.
 
 | |	Apache Hive |	Presto / Spark |
 | :--- | :--- | :--- |
@@ -19,6 +19,9 @@ See URL below:
 > https://github.com/developer-onizuka/mongo-Spark
  
 # 1. Create Spark Session with Hive
+Enabling hive support, allows Spark to seamlessly integrate with existing Hive installations, and leverage Hive’s metadata and storage capabilities.
+When using Spark with Hive, you can read and write data stored in Hive tables using Spark APIs. This allows you to take advantage of **the performance optimizations and scalability benefits of Spark while still being able to leverage the features and benefits of Hive**.
+
 ```
 from pyspark.sql import SparkSession
 
