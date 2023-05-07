@@ -107,6 +107,7 @@ Database Class Loader started - derby.database.classpath=''
 ```
 
 # 6. Query the persistent table after restarting Spark Session
+You can query again even after spark.stop() and creating the session again. 
 ```
 spark.sql("SELECT * FROM products_new WHERE StandardCost > 2000").show()
 +---------+--------+---------+---------+----------------+-------------+------------+-------------+--------------------+
