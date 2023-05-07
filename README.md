@@ -129,11 +129,17 @@ If mongoDB is updated, then you should load it into DataFrame with **spark.read.
 root@efe0e844a026:/# cat <<EOF >products2.csv
 ProductID,ProductNumber,ProductName,ModelName,MakeFlag,StandardCost,ListPrice,SubCategoryID
 1000,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3000.00,3000.00,2
-1001,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3001.00,3001.00,2
-1002,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3002.00,3002.00,2
-1003,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3003.00,3003.00,2
-1004,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3004.00,3004.00,2
-1005,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3005.00,3005.00,2
+1001,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3001.00,3000.00,2
+1002,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3002.00,3000.00,2
+1003,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3003.00,3000.00,2
+1004,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3004.00,3000.00,2
+1005,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3005.00,3000.00,2
+1006,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3006.00,3000.00,2
+1007,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3007.00,3000.00,2
+1008,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3008.00,3000.00,2
+1009,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3009.00,3000.00,2
+1010,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3010.00,3000.00,2
+1011,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3011.00,3000.00,2
 EOF
 ```
 ```
