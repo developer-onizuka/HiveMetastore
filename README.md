@@ -71,8 +71,6 @@ df.write.mode("overwrite").saveAsTable("products_new")
 # 5. Find the Hive Metastore and Parquet files
 Spark automatically creates metastore (metastore_db) in the current directory, deployed with default Apache Derby and also creates a directory configured by spark.sql.warehouse.dir to store the Spark tables (essentially it's a collection of parquet files), which defaults to the directory spark-warehouse in the current directory. The default format is "parquet" so if you don’t specify it, it will be assumed. 
 > https://towardsdatascience.com/notes-about-saving-data-with-spark-3-0-86ba85ca2b71
-<br>
-The Hive metastore preserves **an association between the parquet file and a database** created with saveAsTable(), even if a spark session is restarted.
 The Hive metastore preserves **an association between the parquet file and a database** created with saveAsTable(), even if a spark session is restarted.
 
 ```
