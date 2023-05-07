@@ -122,12 +122,47 @@ spark.sql("SELECT * FROM products_new WHERE StandardCost > 2000").show()
 ```
 
 # 7. Lifecycle of Metastore
-If mongoDB is updated, then you should load it into DataFrame with **spark.read.format("mongo")** again and **df.write.mode("append").saveAsTable("products_new")** this time so that the Hive Metastore can be updated.
+If mongoDB is updated, then you should load it into DataFrame with **spark.read.format("mongo")** again and **df.write.mode("overwrite").saveAsTable("products_new")** so that the Hive Metastore can be updated if needed (if new parquet file is created).
 
-# 7-1.
+# 7-1. Add new record into mongoDB
 ```
-cat <<EOF >products2.csv
+root@efe0e844a026:/# cat <<EOF >products2.csv
 ProductID,ProductNumber,ProductName,ModelName,MakeFlag,StandardCost,ListPrice,SubCategoryID
 1000,BK-R19B-99,"Road-750 Black, 99",Road-750,1,3000.00,3000.00,2
 EOF
+```
+```
+root@efe0e844a026:/# mongoimport --host="localhost" --port=27017 --db="test" --collection="products" --type="csv" --file="products2.csv" --headerline
+```
+
+# 7-2. Read it as a DataFrame
+```
+df = spark.read.format("mongo") \
+               .option("database","test") \
+               .option("collection","products") \
+               .load()
+```
+
+# 7-3. Save it as a Database
+```
+df.write.mode("overwrite").saveAsTable("products_new")
+```
+```
+%ls -l spark-warehouse/products_new
+total 16
+-rw-r--r-- 1 jovyan users 13506 May  7 10:56 part-00000-31f77afe-1dcd-43c7-ac11-7b82331bfeab-c000.snappy.parquet
+-rw-r--r-- 1 jovyan users     0 May  7 10:56 _SUCCESS
+```
+```
+spark.sql("SELECT * FROM products_new WHERE StandardCost > 2000").show()
++---------+--------+---------+---------+------------------+-------------+------------+-------------+--------------------+
+|ListPrice|MakeFlag|ModelName|ProductID|       ProductName|ProductNumber|StandardCost|SubCategoryID|                 _id|
++---------+--------+---------+---------+------------------+-------------+------------+-------------+--------------------+
+|  3578.27|       1| Road-150|      750|  Road-150 Red, 44|   BK-R93R-44|   2171.2942|            2|{6457837b2b6b00c5...|
+|  3578.27|       1| Road-150|      751|  Road-150 Red, 48|   BK-R93R-48|   2171.2942|            2|{6457837b2b6b00c5...|
+|  3578.27|       1| Road-150|      752|  Road-150 Red, 52|   BK-R93R-52|   2171.2942|            2|{6457837b2b6b00c5...|
+|  3578.27|       1| Road-150|      753|  Road-150 Red, 56|   BK-R93R-56|   2171.2942|            2|{6457837b2b6b00c5...|
+|  3578.27|       1| Road-150|      749|  Road-150 Red, 62|   BK-R93R-62|   2171.2942|            2|{6457837b2b6b00c5...|
+|   3000.0|       1| Road-750|     1000|Road-750 Black, 99|   BK-R19B-99|      3000.0|            2|{645783d4913c74c8...|
++---------+--------+---------+---------+------------------+-------------+------------+-------------+--------------------+
 ```
