@@ -120,3 +120,6 @@ spark.sql("SELECT * FROM products_new WHERE StandardCost > 2000").show()
 |  3578.27|       1| Road-150|      752|Road-150 Red, 52|   BK-R93R-52|   2171.2942|            2|{6456f3d06fcaf22f...|
 +---------+--------+---------+---------+----------------+-------------+------------+-------------+--------------------+
 ```
+
+# 7. Lifecycle of Metastore
+If mongoDB is updated, then you should load it into DataFrame with spark.read.format("mongo") and saveAsTable() again so that the Hive Metastore can be updated.
