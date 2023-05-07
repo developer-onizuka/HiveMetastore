@@ -1,15 +1,17 @@
 # Metastore in Apache Spark
 
-Hive provides with a SQL-compatible language on Hadoop using. But it is very difficult to understand even difference between Hive and Presto or Spark.
+Hive provides with a SQL-compatible language on Hadoop using. But it is very difficult to understand even difference between Hive and Presto / Spark. <br>
+This repo explains how the Hive can preserves the processing result in storage.
 
-
-| |	Apache Hive |	Presto |
+| |	Apache Hive |	Presto / Spark |
 | :--- | :--- | :--- |
 | Intermediate result |	Write to Storage |	Write to Memory |
 | Performance |	Slow |	Fast |
-| Data size |	Large | Small |
-|C heckpoint of Failure |	Resume from intermediate data saved in storage | Start over |
+| Use cases |	Large data aggregations | Interactive queries and quick data exploration |
+| Checkpoint of Failure |	Resume from intermediate data saved in storage | Start over |
 
+See also URL below:
+> https://github.com/developer-onizuka/AzureDataFactory#4-difference-between-hive-presto-and-spark
 
 
 > https://medium.com/@sarfarazhussain211/metastore-in-apache-spark-9286097180a4
