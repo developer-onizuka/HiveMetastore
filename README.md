@@ -107,7 +107,7 @@ Database Class Loader started - derby.database.classpath=''
 ```
 
 # 5-1. Parquet
-[chart.png](https://www.dremio.com/wp-content/uploads/2022/04/chart.png)
+![chart.png](https://www.dremio.com/wp-content/uploads/2022/04/chart.png)
 
 As a columnar file format, Apache Parquet can be read by computers much more efficiently and cost-effectively than other formats, making it an ideal file format for big data, analytics, and data lake storage. Some of Parquet’s main benefits are that it is high performance, has efficient compression, and is the industry standard.
 
