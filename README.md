@@ -1,6 +1,7 @@
 # Metastore in Apache Spark
 > https://medium.com/@sarfarazhussain211/metastore-in-apache-spark-9286097180a4
 
+# 1. Create Spark Session with Hive
 ```
 from pyspark.sql import SparkSession
 
@@ -16,6 +17,7 @@ spark = SparkSession \
         .getOrCreate()
 ```
 
+# 2. Get config and Confirm Catalog Implementation
 If you create the spark session without enableHiveSupport(), then the output of spark.sql.catalogImplementation must be None. Spark SQL defaults is in-memory (non-Hive) catalog.
 ```
 conf = spark.sparkContext.getConf()
@@ -31,6 +33,8 @@ print("# spark.sql.catalogImplementation = ", conf.get("spark.sql.catalogImpleme
 # spark.sql.warehouse.dir =  file:/home/jovyan/spark-warehouse
 # spark.sql.catalogImplementation =  hive
 ```
+
+# 3. Extract data from MongoDB to DataFrame in Spark
 ```
 df = spark.read.format("mongo") \
                .option("database","test") \
@@ -38,11 +42,13 @@ df = spark.read.format("mongo") \
                .load()
 ```
 
+# 4. Save the DataFrame as a persistent table
 DataFrames can also be saved as persistent tables into Hive metastore using the saveAsTable command which will materialize the contents of the DataFrame and create a pointer to the data in the Hive metastore. If the spark session is restarted, then DataFrames have gone. But the Hive metastore allows to query to the persistent table even after spark session is restared.
 ```
 df.write.mode("overwrite").saveAsTable("products_new")
 ```
 
+# 5. Find the Hive Metastore and Parquet files
 Spark automatically creates metastore (metastore_db) in the current directory, deployed with default Apache Derby and also creates a directory configured by spark.sql.warehouse.dir to store the Spark tables (essentially it's a collection of parquet files), which defaults to the directory spark-warehouse in the current directory. The default format is parquet so if you don’t specify it, it will be assumed. 
 > https://towardsdatascience.com/notes-about-saving-data-with-spark-3-0-86ba85ca2b71
 <br>
@@ -79,6 +85,8 @@ os.version=5.4.0-139-generic
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
 ```
+
+# 6. Query the persistent table after restarting Spark Session
 ```
 spark.sql("SELECT * FROM products_new WHERE StandardCost > 2000").show()
 +---------+--------+---------+---------+----------------+-------------+------------+-------------+--------------------+
