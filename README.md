@@ -30,8 +30,8 @@ spark = SparkSession \
         .appName("myapp") \
         .master("local") \
         .config("spark.executor.memory", "1g") \
-        .config("spark.mongodb.input.uri","mongodb://172.17.0.3:27017") \
-        .config("spark.mongodb.output.uri","mongodb://172.17.0.3:27017") \
+        .config("spark.mongodb.input.uri","mongodb://172.17.0.2:27017") \
+        .config("spark.mongodb.output.uri","mongodb://172.17.0.2:27017") \
         .config("spark.jars.packages","org.mongodb.spark:mongo-spark-connector_2.12:3.0.0") \
         .enableHiveSupport() \
         .getOrCreate()
