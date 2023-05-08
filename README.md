@@ -64,14 +64,14 @@ df = spark.read.format("mongo") \
 
 # 4. Save the DataFrame as a persistent table
 DataFrames can be saved as persistent tables using the saveAsTable command which will materialize the contents of the DataFrame and create a pointer to the data in the Hive metastore. It is called as a Managed Table, because metastore is also created automatically. If you use the save() instead of saveAsTable(), then you have to create metastore by yourself and associate tables with metastore. <br>
-The save() means that it creates parquet files for the DataFrame in the directory of "products_new" but it does not create metastore_db directory. You have to do it by yourself, so it is called an Unmanaged Table. <br>
+The save() means that it creates parquet files for the DataFrame in the directory of "products_new" but it does not create metastore_db directory. You have to do it by yourself, so it is called an Unmanaged Table. See also #4-1. <br>
 The Hive metastore allows to query to the persistent table, even after spark session is restared as long as the persistent tables still exist. 
 ```
 df.write.mode("overwrite").saveAsTable("products_new")
 ```
 
 # 4-1. Unmanaged Table
-You have to associate between parquet files and table by yourself as like below:
+You have to associate between parquet files and table by yourself as like below, if you create parquet files by **save()** instead of saveAsTable():
 ```
 spark.sql("CREATE EXTERNAL TABLE products_new USING parquet LOCATION '/home/jovyan/products_new'")
 ```
