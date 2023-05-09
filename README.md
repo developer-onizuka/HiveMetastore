@@ -73,7 +73,8 @@ df.write.mode("overwrite").saveAsTable("products_new")
 # 4-1. Unmanaged Table
 You have to associate between parquet files and table by yourself as like below, if you create parquet files by **save()** instead of saveAsTable():
 ```
-spark.sql("CREATE EXTERNAL TABLE external_products USING parquet LOCATION '/home/jovyan/products_new'")
+df.write.mode("overwrite").save("products_new")
+spark.sql("CREATE EXTERNAL TABLE external_products USING parquet LOCATION '/home/jovyan/HiveMetastore/products_new'")
 ```
 Please note that you can not do anything on the table of "products_new" before this command.
 
