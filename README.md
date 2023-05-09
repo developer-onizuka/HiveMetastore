@@ -76,7 +76,6 @@ You have to associate between parquet files and table by yourself as like below,
 df.write.mode("overwrite").save("products_new")
 spark.sql("CREATE EXTERNAL TABLE external_products USING parquet LOCATION '/home/jovyan/HiveMetastore/products_new'")
 ```
-Please note that you can not do anything on the table of "products_new" before this command.
 
 # 5. Find the Hive Metastore and Parquet files
 Spark automatically creates metastore (metastore_db) in the current directory, deployed with default Apache Derby (an open source relational database implemented entirely in Java) and also creates a directory configured by spark.sql.warehouse.dir to store the Spark tables (essentially it's a collection of parquet files), which defaults to the directory spark-warehouse in the current directory. The default format is "parquet" so if you don’t specify it, it will be assumed. 
