@@ -69,6 +69,37 @@ The Hive metastore allows to query to the persistent table, even after spark ses
 ```
 df.write.mode("overwrite").saveAsTable("products_new")
 ```
+```
+spark.sql("DESCRIBE EXTENDED products_new").show(100,100)
++----------------------------+--------------------------------------------------------------+-------+
+|                    col_name|                                                     data_type|comment|
++----------------------------+--------------------------------------------------------------+-------+
+|                   ListPrice|                                                        double|   null|
+|                    MakeFlag|                                                           int|   null|
+|                   ModelName|                                                        string|   null|
+|                   ProductID|                                                           int|   null|
+|                 ProductName|                                                        string|   null|
+|               ProductNumber|                                                        string|   null|
+|                StandardCost|                                                        double|   null|
+|               SubCategoryID|                                                           int|   null|
+|                         _id|                                            struct<oid:string>|   null|
+|                            |                                                              |       |
+|# Detailed Table Information|                                                              |       |
+|                    Database|                                                       default|       |
+|                       Table|                                                  products_new|       |
+|                       Owner|                                                        jovyan|       |
+|                Created Time|                                  Tue May 09 13:42:10 UTC 2023|       |
+|                 Last Access|                                                       UNKNOWN|       |
+|                  Created By|                                                   Spark 3.2.1|       |
+|                        Type|                                                       MANAGED|       | <---
+|                    Provider|                                                       parquet|       |
+|                  Statistics|                                                   13447 bytes|       |
+|                    Location|  file:/home/jovyan/HiveMetastore/spark-warehouse/products_new|       |
+|               Serde Library|   org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe|       |
+|                 InputFormat| org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat|       |
+|                OutputFormat|org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat|       |
++----------------------------+--------------------------------------------------------------+-------+
+```
 
 # 4-1. Unmanaged Table
 You have to associate between parquet files and table by yourself as like below, if you create parquet files by **save()** instead of saveAsTable():
@@ -97,7 +128,7 @@ spark.sql("DESCRIBE EXTENDED external_products").show(100,100)
 |                Created Time|                Tue May 09 13:28:22 UTC 2023|       |
 |                 Last Access|                                     UNKNOWN|       |
 |                  Created By|                                 Spark 3.2.1|       |
-|                        Type|                                    EXTERNAL|       |
+|                        Type|                                    EXTERNAL|       | <---
 |                    Provider|                                     parquet|       |
 |                    Location|file:/home/jovyan/HiveMetastore/products_new|       |
 +----------------------------+--------------------------------------------+-------+
