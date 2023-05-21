@@ -137,7 +137,7 @@ spark.sql("DESCRIBE EXTENDED external_products").show(100,100)
 Spark automatically creates metastore (metastore_db) in the current directory, deployed with default Apache Derby (an open source relational database implemented entirely in Java) after #4 or #4-1. And also creates a directory configured by spark.sql.warehouse.dir to store the Spark tables (essentially it's a collection of parquet files), which defaults to the directory spark-warehouse in the current directory when Hive Table is created only for the case of #4. The default format is "parquet" so if you don’t specify it, it will be assumed. 
 > https://towardsdatascience.com/notes-about-saving-data-with-spark-3-0-86ba85ca2b71
 
-The Hive metastore preserves **an association between the parquet file and a database** created with saveAsTable(), even if a spark session is restarted.
+The Hive metastore preserves **an association between the parquet file and a database** created with saveAsTable(), even if a spark session is restarted. In other words, Define the relationship between the Parquet file and the database in order to treat Parquet files in S3 as a database. This is called Hive Metastore, and it is stored in a workspace of Glue Data Catalog in AWS. Some services such a AWS Athena can handle SQL with this Data Catalog for the database for data analysis, instead of Parquet files directly. <br>
 
 ![aws-glue](https://github.com/developer-onizuka/HiveMetastore/blob/main/20170919-aws-glue-architecture.png)
 ```
