@@ -247,7 +247,7 @@ spark.sql("SELECT * FROM products_new WHERE StandardCost > 2000").show()
 Data Source (mongoDB in this example)
 --> DataFrame in Spark
 --> saveAsTable() in Spark
---> parquet files & metastore
+--> parquet files & metastore (Data Catalog)
 --> Analytics (by some AWS services such as AWS Quick Insight etc...)
 ```
 This series of steps can be thought of as the mechanism of AWS Glue, which creates data catalogs. AWS Glue will use Spark to perform a series of steps to create the metastore behind the process of the data imported from the data source as an ETL job.
