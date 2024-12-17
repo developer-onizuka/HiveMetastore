@@ -3,8 +3,7 @@
 Hive は、Hadoop クラスター上で SQL 互換言語を提供します。HiveとSparkの主な違いは、以下表に書かれた通りですが、それぞれAWS GlueやAthenaにも使われている大変興味深いテクノロジーです。そこで今回はこのHive環境、特にMetastoreについて理解を進めようと思います。ただ、純粋な Hive 環境がなかったため、今回はSpark セッションの開始時に Hive にて EnableHiveSupport オプションを使用することで、処理結果をストレージに保存する方法を学び、AWS Glueの実装を明らかにしたいと思っています。
 
 ---
-Hive provides with a SQL-compatible language on Hadoop cluster. But it is very difficult to understand even difference between Hive and Presto / Spark. 
-I learn how the Hive can preserve the processing result in storage via enableHiveSupport option at initiation of Spark Session, because I don't have any pure Hive environments.
+Hive provides a SQL-compatible language on Hadoop clusters. The main differences between Hive and Spark are listed in the table below, but each is a very interesting technology that is also used in AWS Glue and Athena. Therefore, this time I will try to understand this Hive environment, especially Metastore. However, since I didn't have a pure Hive environment, I would like to learn how to save processing results to storage by using the EnableHiveSupport option in Hive at the start of a Spark session, and to clarify the implementation of AWS Glue.
 
 | |	Apache Hive |	Presto / Spark |
 | :--- | :--- | :--- |
