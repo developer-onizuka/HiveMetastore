@@ -1,5 +1,8 @@
 # Metastore in Apache Spark
 
+Hive は、Hadoop クラスター上で SQL 互換言語を提供します。しかし、Hive と Presto / Spark の違いさえ理解するのは非常に困難です。純粋な Hive 環境がなかったため、今回はSpark セッションの開始時に Hive にて EnableHiveSupport オプションを使用することで、処理結果をストレージに保存する方法を学ぶことにします。
+
+---
 Hive provides with a SQL-compatible language on Hadoop cluster. But it is very difficult to understand even difference between Hive and Presto / Spark. 
 I learn how the Hive can preserve the processing result in storage via enableHiveSupport option at initiation of Spark Session, because I don't have any pure Hive environments.
 
