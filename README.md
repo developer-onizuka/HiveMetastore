@@ -17,6 +17,10 @@ See also URL below:
 > https://medium.com/@sarfarazhussain211/metastore-in-apache-spark-9286097180a4
 
 # 0. Create Virtual Machine and Run mongoDB
+今回はデータソースをMongoDBとして、Sparkを動かすことにします。MongoDBとそこに入れるデータについては以下のURLを参照ください。
+
+---
+This time, we will use MongoDB as the data source and run Spark.
 See URL below:
 > https://github.com/developer-onizuka/mongo-Spark
  
