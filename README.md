@@ -25,6 +25,9 @@ See URL below:
 > https://github.com/developer-onizuka/mongo-Spark
  
 # 1. Create Spark Session with Hive
+Spark セッションの開始時に Hive にて EnableHiveSupport オプションを使用すると、Spark が既存の Hive インストールとシームレスに統合し、Hive のメタデータとストレージ機能を活用できるようになります。 Hive で Spark を使用すると、Spark API を使用して Hive テーブルに格納されたデータの読み取りと書き込みができます。これにより、Hive の機能と利点を活用しながら、Spark のパフォーマンスの最適化とスケーラビリティの利点を活用することができます。
+
+---
 Enabling hive support, allows Spark to seamlessly integrate with existing Hive installations, and leverage Hive’s metadata and storage capabilities.
 When using Spark with Hive, you can read and write data stored in Hive tables using Spark APIs. This allows you to take advantage of **the performance optimizations and scalability benefits of Spark while still being able to leverage the features and benefits of Hive**.
 
@@ -44,6 +47,9 @@ spark = SparkSession \
 ```
 
 # 2. Get config and Confirm Catalog Implementation
+EnableHiveSupport() を使用せずに Spark セッションを作成した場合、spark.sql.catalogImplementation の出力は None になる必要があります。 Spark SQL のデフォルトは、in-memroy (つまり、non-Hive) カタログです。
+
+---
 If you create the spark session without enableHiveSupport(), then the output of spark.sql.catalogImplementation must be None. Spark SQL defaults is in-memory (non-Hive) catalog.
 ```
 conf = spark.sparkContext.getConf()
