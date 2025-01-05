@@ -1,6 +1,6 @@
 # Metastore in Apache Spark
 
-Hive は、Hadoop クラスター上で SQL 互換言語を提供します。HiveとSparkの主な違いは、以下表に書かれた通りですが、それぞれAWS GlueやAthenaにも使われている大変興味深いテクノロジーです。そこで今回はこのHive環境、特にMetastoreについて理解を進めようと思います。ただ、純粋な Hive 環境がなかったため、今回はSpark セッションの開始時に Hive にて EnableHiveSupport オプションを使用することで、処理結果をストレージに保存する方法を学び、AWS Glueの実装を明らかにしたいと思っています。
+Hive は、Hadoop クラスター上で SQL 互換言語を提供します。HiveとSparkの主な違いは、以下表に書かれた通りですが、それぞれAWS GlueやAthenaにも使われている大変興味深いテクノロジーです。そこで今回はこのHive環境、特にMetastoreについて理解を進めようと思います。ただ、純粋な Hive 環境がなかったため、今回はSpark セッションの開始時に Hive にて EnableHiveSupport オプションを使用することで、処理結果をストレージに保存する方法を学び、AWS Glueの実装を明らかにしようと思います。
 
 ---
 Hive provides a SQL-compatible language on Hadoop clusters. The main differences between Hive and Spark are listed in the table below, but each is a very interesting technology that is also used in AWS Glue and Athena. Therefore, this time I will try to understand this Hive environment, especially Metastore. However, since I didn't have a pure Hive environment, I would like to learn how to save processing results to storage by using the EnableHiveSupport option in Hive at the start of a Spark session, and to clarify the implementation of AWS Glue.
@@ -47,7 +47,7 @@ spark = SparkSession \
 ```
 
 # 2. Get config and Confirm Catalog Implementation
-EnableHiveSupport() を使用せずに Spark セッションを作成した場合、spark.sql.catalogImplementation の出力は None になる必要があります。 Spark SQL のデフォルトは、in-memroy (つまり、non-Hive) カタログです。
+EnableHiveSupport() を使用せずに Spark セッションを作成した場合、spark.sql.catalogImplementation の出力は None になります。 Spark SQL のデフォルトは、in-memroy (つまり、non-Hive) カタログです。
 
 ---
 If you create the spark session without enableHiveSupport(), then the output of spark.sql.catalogImplementation must be None. Spark SQL defaults is in-memory (non-Hive) catalog.
