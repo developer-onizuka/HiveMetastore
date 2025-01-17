@@ -75,6 +75,11 @@ df = spark.read.format("mongo") \
 ```
 
 # 4. Save the DataFrame as a persistent table with some transformations
+DataFrame は、DataFrame の内容を具体化し、Hive メタストア内のデータへのポインターを作成する saveAsTable コマンドを使用して、永続テーブルとして保存できます (つまり、Spark の DataFrame から Hive テーブルを作成します)。メタストアも自動的に作成されるため、マネージド テーブルと呼ばれます。 saveAsTable() の代わりに save() を使用する場合は、自分でメタストアを作成し、テーブルをメタストアに関連付ける必要があります。
+save() は、DataFrame のParquetファイルを「products_new」ディレクトリに作成しますが、metastore_db ディレクトリは作成しないことを意味します。自分で行う必要があるため、アンマネージ テーブルと呼ばれます。 #4-1も参照してください。
+Hive メタストアでは、Spark セッションが再起動された後でも、永続テーブルがまだ存在している限り、永続テーブルに対するクエリを実行できます。
+
+---
 DataFrames can be saved as persistent tables **(ie. Create a Hive Table from a DataFrame in Spark)** using the saveAsTable command which will materialize the contents of the DataFrame and create a pointer to the data in the Hive metastore. It is called as a Managed Table, because metastore is also created automatically. If you use the save() instead of saveAsTable(), then you have to create metastore by yourself and associate tables with metastore. <br>
 The save() means that it creates parquet files for the DataFrame in the directory of "products_new" but it does not create metastore_db directory. You have to do it by yourself, so it is called an Unmanaged Table. See also [#4-1](https://github.com/developer-onizuka/HiveMetastore/blob/main/README.md#4-1-unmanaged-table). <br>
 The Hive metastore allows to query to the persistent table, even after spark session is restared as long as the persistent tables still exist. 
@@ -114,6 +119,9 @@ spark.sql("DESCRIBE EXTENDED products_new").show(100,100)
 ```
 
 # 4-1. Unmanaged Table
+saveAsTable() ではなく **save()** でParquetファイルを作成する場合は、以下のように自分でParquetファイルとテーブルを関連付ける必要があります。
+
+---
 You have to associate between parquet files and table by yourself as like below, if you create parquet files by **save()** instead of saveAsTable():
 ```
 df.write.mode("overwrite").save("products_new")
@@ -146,9 +154,17 @@ spark.sql("DESCRIBE EXTENDED external_products").show(100,100)
 +----------------------------+--------------------------------------------+-------+
 ```
 # 5. Find the Hive Metastore and Parquet files
+Spark は、#4 または #4-1 の後、現在のディレクトリにメタストア (metastore_db) を自動的に作成し、デフォルトの Apache Derby (完全に Java で実装されたオープン ソース リレーショナル データベース) でデプロイされます。また、Spark テーブル (本質的にはParquetファイルのコレクション) を保存するために、spark.sql.warehouse.dir によって構成されたディレクトリも作成します。この場合のみ、Hive テーブルが作成されるときは、デフォルトで現在のディレクトリ内のディレクトリ spar-warehouse になります。 #4の。デフォルトの形式は「parquet」なので、指定しない場合はそれが想定されます。
+
+---
 Spark automatically creates metastore (metastore_db) in the current directory, deployed with default Apache Derby (an open source relational database implemented entirely in Java) after #4 or #4-1. And also creates a directory configured by spark.sql.warehouse.dir to store the Spark tables (essentially it's a collection of parquet files), which defaults to the directory spark-warehouse in the current directory when Hive Table is created only for the case of #4. The default format is "parquet" so if you don’t specify it, it will be assumed. 
 > https://towardsdatascience.com/notes-about-saving-data-with-spark-3-0-86ba85ca2b71
 
+Hive メタストアは、Spark セッションが再開された場合でも、**Parquetファイルと saveAsTable() で作成されたデータベース間の関連付け**を保持します。 <br>
+つまり、S3 上の Parquet ファイルをデータベースとして扱うために、Parquet ファイルとデータベースの関係を定義します。これは Hive Metastore と呼ばれ、**AWS Glue のデータ カタログ** のデータベース (一種のワークスペース) に保存されます。 Amazon Athena などの一部のサービスは、Parquet ファイルを直接ではなく、このデータ カタログを参照して、データ分析のために SQL を使用してデータベースにクエリを実行できます。 <br>
+つまり、メタストアは、「****非構造化データをテーブルの列、名前、データ型にマッピングして、直接の SQL テーブルとして扱えるようにするにはどうすればよいですか?****」という質問が成り立つものになります。
+
+---
 The Hive metastore preserves **an association between the parquet file and a database** created with saveAsTable(), even if a spark session is restarted. <br>
 In other words, Define the relationship between the Parquet file and the database in order to treat Parquet files in S3 as a database. This is called Hive Metastore, and it is **stored in a database (a kind of workspaces) in AWS Glue's Data Catalog**. Some services such a Amazon Athena can refer to this Data Catalog to query the database with SQL for data analysis, instead of Parquet files directly. <br>
 In short, a metastore is a thing which can answer the question of "****How do I map the unstructured data to table columns, names and data types which will allow to me to treat as a straight up SQL table?****"
@@ -189,9 +205,15 @@ Database Class Loader started - derby.database.classpath=''
 # 5-1. Parquet
 ![chart.png](https://www.dremio.com/wp-content/uploads/2022/04/chart.png)
 
+列形式のファイル形式である Apache Parquet は、他の形式よりもはるかに効率的かつコスト効率よくコンピューターで読み取ることができるため、ビッグ データ、分析、データ レイク ストレージにとって理想的なファイル形式となっています。 Parquet の主な利点は、パフォーマンスが高く、圧縮が効率的で、業界標準であることです。
+
+---
 As a columnar file format, Apache Parquet can be read by computers much more efficiently and cost-effectively than other formats, making it an ideal file format for big data, analytics, and data lake storage. Some of Parquet’s main benefits are that it is high performance, has efficient compression, and is the industry standard.
 
 # 6. Query the persistent table after restarting Spark Session
+spark.stop() を実行してセッションを再度作成した後でも、再度クエリを実行できます。
+
+---
 You can query again even after spark.stop() and creating the session again. 
 ```
 spark.sql("SELECT * FROM products_new WHERE StandardCost > 2000").show()
@@ -207,6 +229,9 @@ spark.sql("SELECT * FROM products_new WHERE StandardCost > 2000").show()
 ```
 
 # 7. Lifecycle of Metastore
+mongoDB が更新された場合は、**spark.read.format("mongo")** を再度使用し、**df.write.mode("overwrite").saveAsTable("products_new")** を使用してそれを DataFrame にロードする必要があります。これにより、必要に応じて Hive メタストアを更新できるようになります。
+
+---
 If mongoDB is updated, then you should load it into DataFrame with **spark.read.format("mongo")** again and **df.write.mode("overwrite").saveAsTable("products_new")** so that the Hive Metastore can be updated if needed.
 
 But how often do you update the Hive Metastore? You can learn it from the blog of [(Real-Time) Hive Crawling](https://medium.com/@pradipsk.sk/real-time-hive-crawling-cd1db9413ef2).
@@ -262,5 +287,8 @@ Data Source (mongoDB in this example)
 --> parquet files & metastore (Data Catalog)
 --> Analytics (by some AWS services such as AWS Quick Insight etc...)
 ```
+この一連の手順は、データカタログを作成する AWS Glue の仕組みと考えることができます。 AWS Glue は Spark を使用して、ETL ジョブとしてデータソースからインポートされたデータのプロセスの背後でメタストアを作成する一連のステップを実行するものと考えられます。
+
+---
 This series of steps can be thought of as the mechanism of AWS Glue, which creates data catalogs. AWS Glue will use Spark to perform a series of steps to create the metastore behind the process of the data imported from the data source as an ETL job.
 
