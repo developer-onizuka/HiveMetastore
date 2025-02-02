@@ -169,7 +169,7 @@ The Hive metastore preserves **an association between the parquet file and a dat
 In other words, Define the relationship between the Parquet file and the database in order to treat Parquet files in S3 as a database. This is called Hive Metastore, and it is **stored in a database (a kind of workspaces) in AWS Glue's Data Catalog**. Some services such a Amazon Athena can refer to this Data Catalog to query the database with SQL for data analysis, instead of Parquet files directly. <br>
 In short, a metastore is a thing which can answer the question of "****How do I map the unstructured data to table columns, names and data types which will allow to me to treat as a straight up SQL table?****"
 
-![aws-glue](https://github.com/developer-onizuka/HiveMetastore/blob/main/20170919-aws-glue-architecture.png)
+![aws-glue](https://github.com/developer-onizuka/HiveMetastore/blob/main/aws-glue-architecture.png)
 ```
 %ls -l
 total 24
