@@ -1,9 +1,9 @@
-# AWS Glueの実装を、Metastore in Apache Sparkから考える。
+# AWS Glueの実装を、Hive　Metastore から考える。
 
-Hive は、Hadoop クラスター上で SQL 互換言語を提供します。HiveとSparkの主な違いは、以下表に書かれた通りですが、それぞれAWS GlueやAthenaにも使われている大変興味深いテクノロジーです。そこで今回はこのHive環境、特にMetastoreについて理解を進めようと思います。ただ、純粋な Hive 環境がなかったため、今回はSpark セッションの開始時に Hive にて EnableHiveSupport オプションを使用することで、処理結果をストレージに保存する方法を学び、AWS Glueの実装を明らかにしようと思います。
+AWS Glue の Data Catalog は、Apache Hive Metastore互換のカタログと言われています。そこで、AWS Glueの Data Catalog の実装を、Hive Metastoreから解き明かし、その周辺テクノロジとして、HiveとSparkも併せて学ぼうと思います。Hive は、Hadoop クラスター上で SQL 互換言語を提供しますが、HiveとSparkの主な違いは、以下表に書かれた通りで、それぞれAWS GlueやAthenaにも使われている大変興味深いテクノロジーです。なお、純粋な Hive 環境がなかったため、今回はSpark セッションの開始時に Hive にて EnableHiveSupport オプションを使用することで、処理結果をストレージに保存する方法を通じて、AWS Glueの実装を明らかにすることが狙いです。
 
 ---
-Hive provides a SQL-compatible language on Hadoop clusters. The main differences between Hive and Spark are listed in the table below, but each is a very interesting technology that is also used in AWS Glue and Athena. Therefore, this time I will try to understand this Hive environment, especially Metastore. However, since I didn't have a pure Hive environment, I would like to learn how to save processing results to storage by using the EnableHiveSupport option in Hive at the start of a Spark session, and to clarify the implementation of AWS Glue.
+AWS Glue's Data Catalog is said to be an Apache Hive Metastore compatible catalog. Therefore, I would like to unravel the implementation of AWS Glue's Data Catalog from the Hive Metastore, and also learn about Hive and Spark as peripheral technologies. Hive provides a SQL-compatible language on Hadoop clusters, but the main differences between Hive and Spark are listed in the table below, and each is a very interesting technology that is also used in AWS Glue and Athena. Additionally, since I didn't have a pure Hive environment, this time I aim to clarify the implementation of AWS Glue by using the EnableHiveSupport option in Hive at the start of a Spark session to save processing results to storage.
 
 | |	Apache Hive |	Presto / Spark |
 | :--- | :--- | :--- |
@@ -17,7 +17,7 @@ See also URL below:
 > https://medium.com/@sarfarazhussain211/metastore-in-apache-spark-9286097180a4
 
 # 0. Create Virtual Machine and Run mongoDB
-今回はデータソースをMongoDBとして、Sparkを動かすことにします。MongoDBとそこに入れるデータについては以下のURLを参照ください。
+今回はデータソースをMongoDBとして、Sparkを動かすことにします。MongoDBの使い方とそこに入れるデータについては以下のURLを参照ください。
 
 ---
 This time, we will use MongoDB as the data source and run Spark.
@@ -25,7 +25,7 @@ See URL below:
 > https://github.com/developer-onizuka/mongo-Spark
  
 # 1. Create Spark Session with Hive
-Spark セッションの開始時に Hive にて EnableHiveSupport オプションを使用すると、Spark が既存の Hive インストールとシームレスに統合し、Hive のメタデータとストレージ機能を活用できるようになります。 Hive で Spark を使用すると、Spark API を使用して Hive テーブルに格納されたデータの読み取りと書き込みができます。これにより、Hive の機能と利点を活用しながら、Spark のパフォーマンスの最適化とスケーラビリティの利点を活用することができます。
+Spark セッションの開始時に Hive にて EnableHiveSupport オプションを使用すると、Spark が既存の Hive インストールとシームレスに統合し、Hive のMetadataとストレージ機能を活用できるようになります。 Hive で Spark を使用すると、Spark API を使用して Hive テーブルに格納されたデータの読み取りと書き込みができます。これにより、Hive の機能と利点を活用しながら、Spark のパフォーマンスとスケーラビリティの最適化が可能となります。
 
 ---
 Enabling hive support, allows Spark to seamlessly integrate with existing Hive installations, and leverage Hive’s metadata and storage capabilities.
@@ -75,9 +75,9 @@ df = spark.read.format("mongo") \
 ```
 
 # 4. Save the DataFrame as a persistent table with some transformations
-DataFrame は、DataFrame の内容を具体化し、Hive メタストア内のデータへのポインターを作成する saveAsTable コマンドを使用して、永続テーブルとして保存できます (つまり、Spark の DataFrame から Hive テーブルを作成します)。メタストアも自動的に作成されるため、マネージド テーブルと呼ばれます。 saveAsTable() の代わりに save() を使用する場合は、自分でメタストアを作成し、テーブルをメタストアに関連付ける必要があります。
+DataFrame は、DataFrame の内容を具体化し、Hive Metastore内のデータへのポインターを作成する saveAsTable コマンドを使用して、永続テーブルとして保存できます (つまり、Spark の DataFrame から Hive テーブルを作成します)。メタストアも自動的に作成されるため、マネージド テーブルと呼ばれます。 saveAsTable() の代わりに save() を使用する場合は、自分でMetastoreを作成し、テーブルをMetastoreに関連付ける必要があります。
 save() は、DataFrame のParquetファイルを「products_new」ディレクトリに作成しますが、metastore_db ディレクトリは作成しないことを意味します。自分で行う必要があるため、アンマネージ テーブルと呼ばれます。 #4-1も参照してください。
-Hive メタストアでは、Spark セッションが再起動された後でも、永続テーブルがまだ存在している限り、永続テーブルに対するクエリを実行できます。
+Hive Metastoreでは、Spark セッションが再起動された後でも、永続テーブルがまだ存在している限り、永続テーブルに対するクエリを実行できます。
 
 ---
 DataFrames can be saved as persistent tables **(ie. Create a Hive Table from a DataFrame in Spark)** using the saveAsTable command which will materialize the contents of the DataFrame and create a pointer to the data in the Hive metastore. It is called as a Managed Table, because metastore is also created automatically. If you use the save() instead of saveAsTable(), then you have to create metastore by yourself and associate tables with metastore. <br>
@@ -154,15 +154,15 @@ spark.sql("DESCRIBE EXTENDED external_products").show(100,100)
 +----------------------------+--------------------------------------------+-------+
 ```
 # 5. Find the Hive Metastore and Parquet files
-Spark は、#4 または #4-1 の後、現在のディレクトリにメタストア (metastore_db) を自動的に作成し、デフォルトの Apache Derby (完全に Java で実装されたオープン ソース リレーショナル データベース) でデプロイされます。また、Spark テーブル (本質的にはParquetファイルのコレクション) を保存するために、spark.sql.warehouse.dir によって構成されたディレクトリも作成します。この場合のみ、Hive テーブルが作成されるときは、デフォルトで現在のディレクトリ内のディレクトリ spar-warehouse になります。 #4の。デフォルトの形式は「parquet」なので、指定しない場合はそれが想定されます。
+Spark は、#4 または #4-1 の後、現在のディレクトリにMetastore (metastore_db) を自動的に作成し、デフォルトの Apache Derby (完全に Java で実装されたオープン ソース リレーショナル データベース) でデプロイされます。また、Spark テーブル (本質的にはParquetファイルのコレクション) を保存するために、spark.sql.warehouse.dir によって構成されたディレクトリも作成します。この場合のみ、Hive テーブルが作成されるときは、デフォルトで現在のディレクトリ内のディレクトリ spar-warehouse になります。 #4の。デフォルトの形式は「parquet」なので、指定しない場合はそれが想定されます。
 
 ---
 Spark automatically creates metastore (metastore_db) in the current directory, deployed with default Apache Derby (an open source relational database implemented entirely in Java) after #4 or #4-1. And also creates a directory configured by spark.sql.warehouse.dir to store the Spark tables (essentially it's a collection of parquet files), which defaults to the directory spark-warehouse in the current directory when Hive Table is created only for the case of #4. The default format is "parquet" so if you don’t specify it, it will be assumed. 
 > https://towardsdatascience.com/notes-about-saving-data-with-spark-3-0-86ba85ca2b71
 
-Hive メタストアは、Spark セッションが再開された場合でも、**Parquetファイルと saveAsTable() で作成されたデータベース間の関連付け**を保持します。 <br>
+Hive Metastoreは、Spark セッションが再開された場合でも、**Parquetファイルと saveAsTable() で作成されたデータベース間の関連付け**を保持します。 <br>
 つまり、S3 上の Parquet ファイルをデータベースとして扱うために、Parquet ファイルとデータベースの関係を定義します。これは Hive Metastore と呼ばれ、**AWS Glue のデータ カタログ** のデータベース (一種のワークスペース) に保存されます。 Amazon Athena などの一部のサービスは、Parquet ファイルを直接ではなく、このデータ カタログを参照して、データ分析のために SQL を使用してデータベースにクエリを実行できます。 <br>
-つまり、メタストアは、「****非構造化データをテーブルの列、名前、データ型にマッピングして、直接の SQL テーブルとして扱えるようにするにはどうすればよいですか?****」という質問が成り立つものになります。
+つまり、Metastoreは、「****非構造化データをテーブルの列、名前、データ型にマッピングして、直接の SQL テーブルとして扱えるようにするにはどうすればよいですか?****」という質問が成り立つものになります。
 
 ---
 The Hive metastore preserves **an association between the parquet file and a database** created with saveAsTable(), even if a spark session is restarted. <br>
@@ -229,7 +229,7 @@ spark.sql("SELECT * FROM products_new WHERE StandardCost > 2000").show()
 ```
 
 # 7. Lifecycle of Metastore
-mongoDB が更新された場合は、**spark.read.format("mongo")** を再度使用し、**df.write.mode("overwrite").saveAsTable("products_new")** を使用してそれを DataFrame にロードする必要があります。これにより、必要に応じて Hive メタストアを更新できるようになります。
+mongoDB が更新された場合は、**spark.read.format("mongo")** を再度使用し、**df.write.mode("overwrite").saveAsTable("products_new")** を使用してそれを DataFrame にロードする必要があります。これにより、必要に応じて Hive Metastoreを更新できるようになります。
 
 ---
 If mongoDB is updated, then you should load it into DataFrame with **spark.read.format("mongo")** again and **df.write.mode("overwrite").saveAsTable("products_new")** so that the Hive Metastore can be updated if needed.
@@ -287,8 +287,7 @@ Data Source (mongoDB in this example)
 --> parquet files & metastore (Data Catalog)
 --> Analytics (by some AWS services such as AWS Quick Insight etc...)
 ```
-この一連の手順は、データカタログを作成する AWS Glue の仕組みと考えることができます。 AWS Glue は Spark を使用して、ETL ジョブとしてデータソースからインポートされたデータのプロセスの背後でメタストアを作成する一連のステップを実行するものと考えられます。
+今回、AWS Glue の Data Catalog が、Apache Hive Metastore互換のカタログであることを、この一連の手順から理解できました。また、AWS Glue は、Spark を使用してETL ジョブとしてデータソースからデータをインポートするプロセスの背後でMetastoreを作成するマネージドサービスと考えることができるでしょう。
 
 ---
-This series of steps can be thought of as the mechanism of AWS Glue, which creates data catalogs. AWS Glue will use Spark to perform a series of steps to create the metastore behind the process of the data imported from the data source as an ETL job.
-
+This time, through this series of steps, we understood that the AWS Glue Data Catalog is compatible with the Apache Hive Metastore. Additionally, AWS Glue can be considered a managed service that creates a metastore behind the process of importing data from data sources as an ETL job using Spark.
