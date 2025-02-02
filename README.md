@@ -1,4 +1,4 @@
-# AWS Glueの実装を、Hive　Metastore から考える。
+# AWS Glueの実装を、Hive Metastore から考える。
 
 AWS Glue の Data Catalog は、Apache Hive Metastore互換のカタログと言われています。そこで、AWS Glueの Data Catalog の実装を、Hive Metastoreから解き明かし、その周辺テクノロジとして、HiveとSparkも併せて学ぼうと思います。Hive は、Hadoop クラスター上で SQL 互換言語を提供しますが、HiveとSparkの主な違いは、以下表に書かれた通りで、それぞれAWS GlueやAthenaにも使われている大変興味深いテクノロジーです。なお、純粋な Hive 環境がなかったため、今回はSpark セッションの開始時に Hive にて EnableHiveSupport オプションを使用することで、処理結果をストレージに保存する方法を通じて、AWS Glueの実装を明らかにすることが狙いです。
 
