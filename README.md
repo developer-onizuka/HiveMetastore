@@ -79,7 +79,7 @@ df = spark.read.format("mongo") \
 ```
 
 # 4. Save the DataFrame as a persistent table with some transformations
-DataFrame は、DataFrame の内容を具体化し、Hive Metastore内のデータへのポインターを作成する saveAsTable コマンドを使用して、永続テーブルとして保存できます (つまり、Spark の DataFrame から Hive テーブルを作成します)。メタストアも自動的に作成されるため、マネージド テーブルと呼ばれます。 saveAsTable() の代わりに save() を使用する場合は、自分でMetastoreを作成し、テーブルをMetastoreに関連付ける必要があります。
+DataFrame は、DataFrame の内容を具体化し、Hive Metastore内のデータへのポインターを作成する saveAsTable コマンドを使用して、永続テーブルとして保存できます (つまり、Spark の DataFrame から Hive テーブルを作成します)。Metastoreも自動的に作成されるため、マネージド テーブルと呼ばれます。 saveAsTable() の代わりに save() を使用する場合は、自分でMetastoreを作成し、テーブルをMetastoreに関連付ける必要があります。
 save() は、DataFrame のParquetファイルを「products_new」ディレクトリに作成しますが、metastore_db ディレクトリは作成しないことを意味します。自分で行う必要があるため、アンマネージ テーブルと呼ばれます。 #4-1も参照してください。
 Hive Metastoreでは、Spark セッションが再起動された後でも、永続テーブルがまだ存在している限り、永続テーブルに対するクエリを実行できます。
 
