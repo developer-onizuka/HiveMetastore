@@ -1,9 +1,13 @@
 # AWS Glueの実装を、Hive Metastore から考える。
 
-AWS Glue の Data Catalog は、Apache Hive Metastore互換のカタログと言われています。そこで、AWS Glueの Data Catalog の実装を、Hive Metastoreから解き明かし、その周辺テクノロジとして、HiveとSparkも併せて学ぼうと思います。Hive は、Hadoop クラスター上で SQL 互換言語を提供しますが、HiveとSparkの主な違いは、以下表に書かれた通りで、それぞれAWS GlueやAthenaにも使われている大変興味深いテクノロジーです。なお、純粋な Hive 環境がなかったため、今回はSpark セッションの開始時に Hive にて EnableHiveSupport オプションを使用することで、処理結果をストレージに保存する方法を通じて、AWS Glueの実装を明らかにすることが狙いです。
+AWS Glue の Data Catalog は、Apache Hive Metastore互換のカタログと言われています。そこで、AWS Glueの Data Catalog の実装を、Hive Metastoreから解き明かし、その周辺テクノロジとして、HiveとSparkも併せて学ぼうと思います。このリポジトリを読むことで、任意のデータソースにおいて更新されたデータをどのようにGlueでクロールし、それをData Catalogとして保存し、データを管理していくかを理解することができます。
+
+Hive は、Hadoop クラスター上で SQL 互換言語を提供しますが、HiveとSparkの主な違いは、以下表に書かれた通りで、それぞれAWS GlueやAthenaにも使われている大変興味深いテクノロジーです。なお、純粋な Hive 環境がなかったため、今回はSpark セッションの開始時に Hive にて EnableHiveSupport オプションを使用することで、処理結果をストレージに保存する方法を通じて、AWS Glueの実装を一緒に解き明かしましょう。
 
 ---
-AWS Glue's Data Catalog is said to be an Apache Hive Metastore compatible catalog. Therefore, I would like to unravel the implementation of AWS Glue's Data Catalog from the Hive Metastore, and also learn about Hive and Spark as peripheral technologies. Hive provides a SQL-compatible language on Hadoop clusters, but the main differences between Hive and Spark are listed in the table below, and each is a very interesting technology that is also used in AWS Glue and Athena. Additionally, since I didn't have a pure Hive environment, this time I aim to clarify the implementation of AWS Glue by using the EnableHiveSupport option in Hive at the start of a Spark session to save processing results to storage.
+The AWS Glue Data Catalog is said to be compatible with the Apache Hive Metastore. Therefore, we will uncover the implementation of the AWS Glue Data Catalog starting from the Hive Metastore, and also learn about the surrounding technologies, Hive and Spark. By reading this repository, you will understand how to crawl updated data from any data source with Glue, save it as a Data Catalog, and manage the data.
+
+Hive provides an SQL-compatible language on a Hadoop cluster, but the main differences between Hive and Spark are listed in the table below. Both are highly intriguing technologies, also used in AWS Glue and Athena. Since there was no pure Hive environment available, this time we will use the EnableHiveSupport option at the start of a Spark session to save the processing results to storage, thus uncovering the implementation of AWS Glue together.
 
 | |	Apache Hive |	Presto / Spark |
 | :--- | :--- | :--- |
