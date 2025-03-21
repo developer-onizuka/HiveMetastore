@@ -109,7 +109,7 @@ spark.sql("DESCRIBE EXTENDED products_new").show(100,100)
 |                    Database|                                                       default|       |
 |                       Table|                                                  products_new|       |
 |                       Owner|                                                        jovyan|       |
-|                Created Time|                                  Tue May 09 13:42:10 UTC 2023|       |
+|                Created Time|                                  Thu May 09 13:42:10 UTC 2024|       |
 |                 Last Access|                                                       UNKNOWN|       |
 |                  Created By|                                                   Spark 3.2.1|       |
 |                        Type|                                                       MANAGED|       | <---
@@ -149,7 +149,7 @@ spark.sql("DESCRIBE EXTENDED external_products").show(100,100)
 |# Detailed Table Information|                                            |       |
 |                    Database|                                     default|       |
 |                       Table|                           external_products|       |
-|                Created Time|                Tue May 09 13:28:22 UTC 2023|       |
+|                Created Time|                Thu May 09 13:28:22 UTC 2024|       |
 |                 Last Access|                                     UNKNOWN|       |
 |                  Created By|                                 Spark 3.2.1|       |
 |                        Type|                                    EXTERNAL|       | <---
@@ -192,7 +192,7 @@ total 16
 ```
 %cat derby.log
 ----------------------------------------------------------------
-Sun May 07 05:10:06 UTC 2023:
+Mon May 07 05:10:06 UTC 2024:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0187-f49d-f849-0000042485f8 
 on database directory /home/jovyan/metastore_db with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@5ffd2b27 
 Loaded from file:/usr/local/spark-3.2.1-bin-hadoop3.2/jars/derby-10.14.2.0.jar
